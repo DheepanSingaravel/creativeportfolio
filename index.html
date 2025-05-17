@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Portfolio Feed</title>
+    <!-- Tailwind CSS via CDN for quick utility classes -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@3.4.4/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+
+    <!-- Google Fonts: sans‑serif & cursive pair -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Pacifico&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        /* gentle pastel palette */
+        --bg-main: #fffbf9;
+        --bg-accent: #ffeef6;
+      }
+      body {
+        font-family: "Poppins", sans-serif;
+        background-color: var(--bg-main);
+      }
+      h1.logo {
+        font-family: "Pacifico", cursive;
+      }
+      /* card hover */
+      .post:hover {
+        transform: scale(1.03);
+        transition: transform 0.2s ease;
+      }
+      /* modal backdrop */
+      .modal {
+        background: rgba(0, 0, 0, 0.6);
+      }
+    </style>
+  </head>
+  <body class="flex flex-col items-center min-h-screen">
+    <!-- Header / Logo -->
+    <header class="py-6 text-center">
+      <h1 class="logo text-3xl text-pink-400">My Portfolio</h1>
+    </header>
+
+    <!-- Feed -->
+    <main class="max-w-6xl w-full px-2">
+      <div
+        id="feed"
+        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2"
+      >
+        <!-- Each button represents one post (10 total) -->
+        <button class="post" data-index="1">
+          <img
+            src="image_1.jpg"
+            alt="Event 1 preview"
+            class="w-full h-64 object-cover rounded-lg shadow"
+          />
+        </button>
+        <button class="post" data-index="2">
+          <img
+            src="image_2.jpg"
+            alt="Event 2 preview"
+            class="w-full h-64 object-cover rounded-lg shadow"
+          />
+        </button>
+        <button class="post" data-index="3">
+          <img
+            src="image_3.jpg"
+            alt="Event 3 preview"
+            class="w-full h-64 object-cover rounded-lg shadow"
+          />
+        </button>
+        <button class="post" data-index="4">
+          <img
+            src="image_4.jpg"
+            alt="Event 4 preview"
+            class="w-full h-64 object-cover rounded-lg shadow"
+          />
+        </button>
+        <button class="post" data-index="5">
+          <img
+            src="image_5.jpg"
+            alt="Event 5 preview"
+            class="w-full h-64 object-cover rounded-lg shadow"
+          />
+        </button>
+        <button class="post" data-index="6">
+          <img
+            src="image_6.jpg"
+            alt="Event 6 preview"
+            class="w-full h-64 object-cover rounded-lg shadow"
+          />
+        </button>
+        <button class="post" data-index="7">
+          <img
+            src="image_7.jpg"
+            alt="Event 7 preview"
+            class="w-full h-64 object-cover rounded-lg shadow"
+          />
+        </button>
+        <button class="post" data-index="8">
+          <img
+            src="image_8.jpg"
+            alt="Event 8 preview"
+            class="w-full h-64 object-cover rounded-lg shadow"
+          />
+        </button>
+        <button class="post" data-index="9">
+          <img
+            src="image_9.jpg"
+            alt="Event 9 preview"
+            class="w-full h-64 object-cover rounded-lg shadow"
+          />
+        </button>
+        <button class="post" data-index="10">
+          <img
+            src="image_10.jpg"
+            alt="Event 10 preview"
+            class="w-full h-64 object-cover rounded-lg shadow"
+          />
+        </button>
+      </div>
+    </main>
+
+    <!-- Modal overlay (hidden by default) -->
+    <div
+      id="modal"
+      class="modal fixed inset-0 hidden items-center justify-center z-50"
+    >
+      <div
+        class="modal-content bg-white rounded-2xl shadow-lg flex flex-col md:flex-row overflow-hidden max-w-4xl w-full"
+      >
+        <img
+          id="modal-img"
+          src=""
+          alt="Expanded post image"
+          class="w-full md:w-1/2 object-cover h-72 md:h-auto"
+        />
+        <!-- details panel -->
+        <div class="p-6 flex flex-col md:w-1/2">
+          <h2 id="modal-title" class="text-xl font-semibold mb-2">
+            Project Title
+          </h2>
+          <p id="modal-desc" class="text-gray-600 flex-grow">
+            Detailed description goes here...
+          </p>
+          <button
+            id="close"
+            class="self-end mt-4 text-pink-500 hover:text-pink-700"
+          >
+            Close ✕
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Simple script for modal handling -->
+    <script>
+      const posts = [
+        {
+          img: "image_1.jpg",
+          title: "Event 1",
+          desc: "Portfolio details for event 1...",
+        },
+        {
+          img: "image_2.jpg",
+          title: "Event 2",
+          desc: "Portfolio details for event 2...",
+        },
+        {
+          img: "image_3.jpg",
+          title: "Event 3",
+          desc: "Portfolio details for event 3...",
+        },
+        {
+          img: "image_4.jpg",
+          title: "Event 4",
+          desc: "Portfolio details for event 4...",
+        },
+        {
+          img: "image_5.jpg",
+          title: "Event 5",
+          desc: "Portfolio details for event 5...",
+        },
+        {
+          img: "image_6.jpg",
+          title: "Event 6",
+          desc: "Portfolio details for event 6...",
+        },
+        {
+          img: "image_7.jpg",
+          title: "Event 7",
+          desc: "Portfolio details for event 7...",
+        },
+        {
+          img: "image_8.jpg",
+          title: "Event 8",
+          desc: "Portfolio details for event 8...",
+        },
+        {
+          img: "image_9.jpg",
+          title: "Event 9",
+          desc: "Portfolio details for event 9...",
+        },
+        {
+          img: "image_10.jpg",
+          title: "Event 10",
+          desc: "Portfolio details for event 10...",
+        },
+      ];
+
+      const modal = document.getElementById("modal");
+      const modalImg = document.getElementById("modal-img");
+      const modalTitle = document.getElementById("modal-title");
+      const modalDesc = document.getElementById("modal-desc");
+      const closeBtn = document.getElementById("close");
+
+      // Attach click listeners to each post button
+      document.querySelectorAll(".post").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const index = btn.dataset.index - 1;
+          const p = posts[index];
+          modalImg.src = p.img;
+          modalImg.alt = p.title;
+          modalTitle.textContent = p.title;
+          modalDesc.textContent = p.desc;
+          modal.classList.remove("hidden");
+        });
+      });
+
+      closeBtn.addEventListener("click", () => modal.classList.add("hidden"));
+      // Close on backdrop click
+      modal.addEventListener("click", (e) => {
+        if (e.target === modal) {
+          modal.classList.add("hidden");
+        }
+      });
+    </script>
+  </body>
+</html>

@@ -1,125 +1,96 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>My Portfolio Feed</title>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Portfolio Feed</title>
+  
+  <!-- Tailwind CSS via CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.4.4/dist/tailwind.min.css" rel="stylesheet" />
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Pacifico&display=swap" rel="stylesheet" />
+  
+  <style>
+    /* Square grid & hover */
+    .feed {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+    }
 
-    <!-- Tailwind CSS via CDN -->
-    <link
-      href="https://cdn.jsdelivr.net/npm/tailwindcss@3.4.4/dist/tailwind.min.css"
-      rel="stylesheet"
-    />
+    .post {
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    /* lock 1:1 aspect */
+    .post::before {
+      content: "";
+      display: block;
+      padding-bottom: 100%;
+    }
+    /* image covers the square */
+    .post img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    .post:hover img {
+      transform: scale(1.05);
+    }
 
-    <!-- Google Fonts -->
-    <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Pacifico&display=swap"
-      rel="stylesheet"
-    />
-
-    <style>
-      /* -------- square‑aspect utility -------- */
-      .square::before {
-        content: "";
-        display: block;
-        padding-bottom: 100%; /* 1:1 aspect‑ratio */
-      }
-      .square img {
-        position: absolute;
-        inset: 0;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-      }
-    </style>
-  </head>
-  <body class="bg-[#fafafa] font-[Poppins] text-gray-800">
-    <main class="max-w-screen-md mx-auto p-4">
-      <!-- ─── Profile / bio header ─────────────────────────────────────────── -->
-      <header class="mb-6">
-        <div class="flex items-center gap-4">
-          <!-- Replace src with your avatar -->
-          <img
-            src="profile_placeholder.jpg"
-            alt="Profile photo"
-            class="w-24 h-24 rounded-full object-cover border-2 border-rose-200"
-          />
-
-          <div>
-            <!-- Replace # with your LinkedIn URL -->
-            <a
-              href="#"
-              id="linkedin-link"
-              class="text-sky-600 font-medium hover:underline"
-              >check out my linkedin</a
-            >
-          </div>
-        </div>
-
-        <!-- CTA buttons -->
-        <div class="flex gap-4 mt-4">
-          <button
-            id="contactBtn"
-            class="flex-1 py-2 rounded-full bg-sky-300 hover:bg-sky-400 text-white font-semibold transition"
-          >
-            Contact Me
-          </button>
-          <button
-            id="testimonialsBtn"
-            class="flex-1 py-2 rounded-full border border-sky-300 text-sky-600 hover:bg-sky-300 hover:text-white font-semibold transition"
-          >
-            Testimonials
-          </button>
-        </div>
-      </header>
-
-      <!-- ─── Feed grid ───────────────────────────────────────────────────── -->
-      <section
-        id="feed"
-        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"
-      ></section>
-    </main>
-
-    <!-- ─── Hidden post template ──────────────────────────────────────────── -->
-    <template id="post-template">
-      <div class="relative square cursor-pointer overflow-hidden rounded-lg shadow-sm hover:shadow-md transition">
-        <img src="" alt="post" />
-      </div>
-    </template>
-
-    <!-- ─── Modal viewer ──────────────────────────────────────────────────── -->
-    <div
-      id="viewer"
-      class="fixed inset-0 z-50 hidden items-center justify-center bg-black/60 backdrop-blur"
-    >
-      <div
-        class="relative flex w-full max-w-3xl flex-col overflow-hidden rounded-lg bg-white md:flex-row"
-      >
-        <div class="relative md:w-2/3">
-          <img
-            id="viewer-img"
-            src=""
-            alt="viewer"
-            class="h-full w-full object-cover"
-          />
-        </div>
-        <div class="relative md:w-1/3 p-4">
-          <h3 id="viewer-title" class="mb-2 font-bold"></h3>
-          <p id="viewer-desc" class="text-sm"></p>
-          <button
-            id="viewer-close"
-            class="absolute right-2 top-2 text-2xl text-gray-600 hover:text-black"
-          >
-            &times;
-          </button>
-        </div>
-      </div>
+    /* Modal (simple in‑page viewer) */
+    #viewer {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 50;
+    }
+    #viewer.hidden { display: none; }
+    #viewerContent {
+      background: #fff;
+      max-width: 900px;
+      width: 90%;
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      gap: 1rem;
+      padding: 1rem;
+      border-radius: 0.75rem;
+    }
+    #viewerContent img {
+      width: 100%;
+      height: auto;
+      border-radius: 0.5rem;
+    }
+  </style>
+</head>
+<body class="bg-[#fafafa] font-[Poppins] text-gray-800">
+  <header class="text-center py-6">
+    <h1 class="text-3xl font-bold mb-4">My Creative Portfolio</h1>
+    <!-- Pastel buttons -->
+    <div class="flex justify-center gap-4 mb-6">
+      <button class="px-6 py-2 rounded-full bg-pink-200/90 hover:bg-pink-200 font-semibold transition">Contact Me</button>
+      <button class="px-6 py-2 rounded-full bg-blue-200/90 hover:bg-blue-200 font-semibold transition">Testimonials</button>
     </div>
+  </header>
 
-    <!-- ─── Script ────────────────────────────────────────────────────────── -->
-    <script>
-      /* Posts: replace src, title & description with your real data */
-      const posts=[
+  <main id="feed" class="feed px-4"></main>
+
+  <!-- Modal viewer -->
+  <div id="viewer" class="hidden">
+    <div id="viewerContent"></div>
+  </div>
+
+  <script>
+
+    const posts=[
       {src:'image_1.jpeg',title:'Campaign Launch',description:'Details about Campaign Launch'},
       {src:'image_2.png',title:'Award Night',description:'Description of Award'},
       {src:'image_3.jpg',title:'Event Booth',description:'Description of Event Booth'},
@@ -132,41 +103,40 @@
       {src:'image_10.jpg',title:'TV Spot',description:'Description of TV Spot'}
     ];
 
-      const feed = document.getElementById("feed");
-      const tmpl = document.getElementById("post-template").content;
+    const feed = document.getElementById("feed");
+    const viewer = document.getElementById("viewer");
+    const viewerContent = document.getElementById("viewerContent");
 
-      /* Populate the feed */
-      posts.forEach((post) => {
-        const node = tmpl.cloneNode(true);
-        const img = node.querySelector("img");
-        img.src = post.src;
-        img.alt = post.title;
-        node.firstElementChild.addEventListener("click", () => openViewer(post));
-        feed.appendChild(node);
-      });
+    // Build grid
+    posts.forEach((post, i) => {
+      const card = document.createElement("div");
+      card.className = "post";
+      card.innerHTML = `<img src="${post.src}" alt="${post.title}">`;
+      card.addEventListener("click", () => openViewer(i));
+      feed.appendChild(card);
+    });
 
-      /* Viewer logic */
-      const viewer = document.getElementById("viewer");
-      const vImg = document.getElementById("viewer-img");
-      const vTitle = document.getElementById("viewer-title");
-      const vDesc = document.getElementById("viewer-desc");
-      const vClose = document.getElementById("viewer-close");
+    function openViewer(index) {
+      const { src, title, description } = posts[index];
+      viewerContent.innerHTML = `
+        <img src="${src}" alt="${title}">
+        <div class="flex flex-col gap-2">
+          <h2 class="text-xl font-semibold mb-2">${title}</h2>
+          <p class="text-sm text-gray-600 flex-1">${description}</p>
+          <button class="self-end px-4 py-2 bg-red-500/90 text-white rounded hover:bg-red-500" onclick="closeViewer()">Close</button>
+        </div>
+      `;
+      viewer.classList.remove("hidden");
+    }
 
-      function openViewer(post) {
-        vImg.src = post.src;
-        vTitle.textContent = post.title;
-        vDesc.textContent = post.description;
-        viewer.classList.remove("hidden");
-      }
+    function closeViewer() {
+      viewer.classList.add("hidden");
+    }
 
-      function closeViewer() {
-        viewer.classList.add("hidden");
-      }
-
-      vClose.addEventListener("click", closeViewer);
-      viewer.addEventListener("click", (e) => {
-        if (e.target === viewer) closeViewer();
-      });
-    </script>
-  </body>
+    // Close on backdrop click
+    viewer.addEventListener("click", (e) => {
+      if (e.target === viewer) closeViewer();
+    });
+  </script>
+</body>
 </html>

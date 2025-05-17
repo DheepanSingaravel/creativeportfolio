@@ -1,244 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>My Portfolio Feed</title>
-    <!-- Tailwind CSS via CDN for quick utility classes -->
-    <link
-      href="https://cdn.jsdelivr.net/npm/tailwindcss@3.4.4/dist/tailwind.min.css"
-      rel="stylesheet"
-    />
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Portfolio Feed</title>
+  <!-- Tailwind CSS via CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.4.4/dist/tailwind.min.css" rel="stylesheet" />
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Pacifico&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #fcfcfe;
+      --accent: #ffe9f4;
+    }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--bg);
+      color: #222;
+    }
+    h1.logo {
+      font-family: 'Pacifico', cursive;
+    }
 
-    <!-- Google Fonts: sans‑serif & cursive pair -->
-    <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Pacifico&display=swap"
-      rel="stylesheet"
-    />
+    /* --- helper to force perfectly square thumbnails --- */
+    .square {
+      position: relative;
+      width: 100%;
+    }
+    .square::before {
+      content: '';
+      display: block;
+      padding-bottom: 100%; /* 1:1 aspect ratio */
+    }
+    .square > img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col items-center">
+  <header class="py-6">
+    <h1 class="logo text-3xl text-pink-500">My Highlights</h1>
+  </header>
 
-    <style>
-      :root {
-        /* gentle pastel palette */
-        --bg-main: #fffbf9;
-        --bg-accent: #ffeef6;
-      }
-      body {
-        font-family: "Poppins", sans-serif;
-        background-color: var(--bg-main);
-      }
-      h1.logo {
-        font-family: "Pacifico", cursive;
-      }
-      /* card hover */
-      .post:hover {
-        transform: scale(1.03);
-        transition: transform 0.2s ease;
-      }
-      /* modal backdrop */
-      .modal {
-        background: rgba(0, 0, 0, 0.6);
-      }
-    </style>
-  </head>
-  <body class="flex flex-col items-center min-h-screen">
-    <!-- Header / Logo -->
-    <header class="py-6 text-center">
-      <h1 class="logo text-3xl text-pink-400">My Portfolio</h1>
-    </header>
+  <main class="w-full max-w-screen-lg px-2">
+    <div id="grid" class="grid grid-cols-2 md:grid-cols-3 gap-2"></div>
+  </main>
 
-    <!-- Feed -->
-    <main class="max-w-6xl w-full px-2">
-      <div
-        id="feed"
-        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2"
-      >
-        <!-- Each button represents one post (10 total) -->
-        <button class="post" data-index="1">
-          <img
-            src="image_1.jpeg"
-            alt="Event 1 preview"
-            class="w-full h-64 object-cover rounded-lg shadow"
-          />
-        </button>
-        <button class="post" data-index="2">
-          <img
-            src="image_2.png"
-            alt="Event 2 preview"
-            class="w-full h-64 object-cover rounded-lg shadow"
-          />
-        </button>
-        <button class="post" data-index="3">
-          <img
-            src="image_3.jpg"
-            alt="Event 3 preview"
-            class="w-full h-64 object-cover rounded-lg shadow"
-          />
-        </button>
-        <button class="post" data-index="4">
-          <img
-            src="image_4.jpg"
-            alt="Event 4 preview"
-            class="w-full h-64 object-cover rounded-lg shadow"
-          />
-        </button>
-        <button class="post" data-index="5">
-          <img
-            src="image_5.jpeg"
-            alt="Event 5 preview"
-            class="w-full h-64 object-cover rounded-lg shadow"
-          />
-        </button>
-        <button class="post" data-index="6">
-          <img
-            src="image_6.jpg"
-            alt="Event 6 preview"
-            class="w-full h-64 object-cover rounded-lg shadow"
-          />
-        </button>
-        <button class="post" data-index="7">
-          <img
-            src="image_7.jpeg"
-            alt="Event 7 preview"
-            class="w-full h-64 object-cover rounded-lg shadow"
-          />
-        </button>
-        <button class="post" data-index="8">
-          <img
-            src="image_8.jpg"
-            alt="Event 8 preview"
-            class="w-full h-64 object-cover rounded-lg shadow"
-          />
-        </button>
-        <button class="post" data-index="9">
-          <img
-            src="image_9.jpeg"
-            alt="Event 9 preview"
-            class="w-full h-64 object-cover rounded-lg shadow"
-          />
-        </button>
-        <button class="post" data-index="10">
-          <img
-            src="image_10.jpg"
-            alt="Event 10 preview"
-            class="w-full h-64 object-cover rounded-lg shadow"
-          />
-        </button>
-      </div>
-    </main>
-
-    <!-- Modal overlay (hidden by default) -->
-    <div
-      id="modal"
-      class="modal fixed inset-0 hidden items-center justify-center z-50"
-    >
-      <div
-        class="modal-content bg-white rounded-2xl shadow-lg flex flex-col md:flex-row overflow-hidden max-w-4xl w-full"
-      >
-        <img
-          id="modal-img"
-          src=""
-          alt="Expanded post image"
-          class="w-full md:w-1/2 object-cover h-72 md:h-auto"
-        />
-        <!-- details panel -->
-        <div class="p-6 flex flex-col md:w-1/2">
-          <h2 id="modal-title" class="text-xl font-semibold mb-2">
-            Project Title
-          </h2>
-          <p id="modal-desc" class="text-gray-600 flex-grow">
-            Detailed description goes here...
-          </p>
-          <button
-            id="close"
-            class="self-end mt-4 text-pink-500 hover:text-pink-700"
-          >
-            Close ✕
-          </button>
-        </div>
+  <!-- Modal viewer -->
+  <div id="viewer" class="fixed inset-0 bg-black/70 flex items-center justify-center z-50 hidden">
+    <div class="bg-white rounded-xl shadow-xl w-11/12 md:w-3/4 lg:w-2/3 xl:w-1/2 overflow-hidden flex flex-col md:flex-row">
+      <img id="viewer-img" src="" alt="" class="w-full md:w-1/2 object-cover" />
+      <div class="flex-1 p-4 flex flex-col">
+        <h2 id="viewer-title" class="text-xl font-semibold mb-2"></h2>
+        <p id="viewer-desc" class="flex-1 overflow-y-auto mb-4"></p>
+        <button id="close" class="self-end px-4 py-2 rounded-lg bg-pink-500 text-white">Close</button>
       </div>
     </div>
+  </div>
 
-    <!-- Simple script for modal handling -->
-    <script>
-      const posts = [
-        {
-          img: "image_1.jpg",
-          title: "Event 1",
-          desc: "Portfolio details for event 1...",
-        },
-        {
-          img: "image_2.jpg",
-          title: "Event 2",
-          desc: "Portfolio details for event 2...",
-        },
-        {
-          img: "image_3.jpg",
-          title: "Event 3",
-          desc: "Portfolio details for event 3...",
-        },
-        {
-          img: "image_4.jpg",
-          title: "Event 4",
-          desc: "Portfolio details for event 4...",
-        },
-        {
-          img: "image_5.jpg",
-          title: "Event 5",
-          desc: "Portfolio details for event 5...",
-        },
-        {
-          img: "image_6.jpg",
-          title: "Event 6",
-          desc: "Portfolio details for event 6...",
-        },
-        {
-          img: "image_7.jpg",
-          title: "Event 7",
-          desc: "Portfolio details for event 7...",
-        },
-        {
-          img: "image_8.jpg",
-          title: "Event 8",
-          desc: "Portfolio details for event 8...",
-        },
-        {
-          img: "image_9.jpg",
-          title: "Event 9",
-          desc: "Portfolio details for event 9...",
-        },
-        {
-          img: "image_10.jpg",
-          title: "Event 10",
-          desc: "Portfolio details for event 10...",
-        },
-      ];
+  <script>
+    // === placeholder data ===
+    const posts = [
+      { src: "image_1.jpg", title: "Project 1", description: "Details about project 1" },
+      { src: "image_2.jpg", title: "Project 2", description: "Details about project 2" },
+      { src: "image_3.jpg", title: "Project 3", description: "Details about project 3" },
+      { src: "image_4.jpg", title: "Project 4", description: "Details about project 4" },
+      { src: "image_5.jpg", title: "Project 5", description: "Details about project 5" },
+      { src: "image_6.jpg", title: "Project 6", description: "Details about project 6" },
+      { src: "image_7.jpg", title: "Project 7", description: "Details about project 7" },
+      { src: "image_8.jpg", title: "Project 8", description: "Details about project 8" },
+      { src: "image_9.jpg", title: "Project 9", description: "Details about project 9" },
+      { src: "image_10.jpg", title: "Project 10", description: "Details about project 10" }
+    ];
 
-      const modal = document.getElementById("modal");
-      const modalImg = document.getElementById("modal-img");
-      const modalTitle = document.getElementById("modal-title");
-      const modalDesc = document.getElementById("modal-desc");
-      const closeBtn = document.getElementById("close");
+    // === build grid ===
+    const grid = document.getElementById("grid");
 
-      // Attach click listeners to each post button
-      document.querySelectorAll(".post").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          const index = btn.dataset.index - 1;
-          const p = posts[index];
-          modalImg.src = p.img;
-          modalImg.alt = p.title;
-          modalTitle.textContent = p.title;
-          modalDesc.textContent = p.desc;
-          modal.classList.remove("hidden");
-        });
-      });
+    posts.forEach((p) => {
+      const wrapper = document.createElement("div");
+      wrapper.className =
+        "square overflow-hidden rounded-lg shadow-md cursor-pointer transform transition duration-300 hover:scale-105 group";
 
-      closeBtn.addEventListener("click", () => modal.classList.add("hidden"));
-      // Close on backdrop click
-      modal.addEventListener("click", (e) => {
-        if (e.target === modal) {
-          modal.classList.add("hidden");
-        }
-      });
-    </script>
-  </body>
+      const img = document.createElement("img");
+      img.src = p.src;
+      img.alt = p.title;
+      img.className = "w-full h-full object-cover absolute inset-0";
+
+      wrapper.appendChild(img);
+      wrapper.addEventListener("click", () => openViewer(p));
+      grid.appendChild(wrapper);
+    });
+
+    // === modal logic ===
+    const viewer = document.getElementById("viewer");
+    const vImg = document.getElementById("viewer-img");
+    const vTitle = document.getElementById("viewer-title");
+    const vDesc = document.getElementById("viewer-desc");
+
+    document.getElementById("close").addEventListener("click", () => viewer.classList.add("hidden"));
+    viewer.addEventListener("click", (e) => {
+      if (e.target === viewer) viewer.classList.add("hidden");
+    });
+
+    function openViewer(post) {
+      vImg.src = post.src;
+      vTitle.textContent = post.title;
+      vDesc.textContent = post.description;
+      viewer.classList.remove("hidden");
+    }
+  </script>
+</body>
 </html>
